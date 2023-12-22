@@ -1,5 +1,7 @@
 #include "universal_tree_benchmark.h"
+#include "naive_bst.h"
 
 int main() {
-    mock();
+    implementations::NaiveBinarySearchTree<int> a;
+    a.Insert(234);
 }
