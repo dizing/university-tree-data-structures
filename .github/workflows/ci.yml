@@ -11,11 +11,11 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-        - { name: Windows VS2019, os: windows-2019  }
-       # - { name: Windows VS2022, os: windows-2022  }
-        - { name: Linux GCC,      os: ubuntu-latest }
-        - { name: Linux Clang,    os: ubuntu-latest, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ }
-        - { name: macOS,          os: macos-latest  }
+        - { name: Windows VS2019, os: windows-2019, binary_artifact_name: win-server-2019 }
+       # - { name: Windows VS2022, os: windows-2022, binary_artifact_name: win-server-2022 }
+        - { name: Linux GCC,      os: ubuntu-22.04, binary_artifact_name: ubuntu-22.04-gcc }
+        - { name: Linux Clang,    os: ubuntu-22.04, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++, binary_artifact_name: ubuntu-22.04-clang }
+        - { name: macOS,          os: macos-12, binary_artifact_name: macos-12 }
         config:
        # - { name: Shared, flags: -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE -DBUILD_SHARED_LIBS=TRUE }
         - { name: Static, flags: -DBUILD_SHARED_LIBS=FALSE }
@@ -43,6 +43,6 @@ jobs:
     - name: Archive binaries artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: binaries_${{matrix.platform.name}}_${{matrix.config.name}}
+        name: binaries-${{matrix.platform.binary_artifact_name}}-${{matrix.config.name}}
         path: |
           build/bin
