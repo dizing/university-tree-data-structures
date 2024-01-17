@@ -22,7 +22,7 @@ concept NodeType = requires {
   t.GetData();
 };
 
-// Универсальный класс, содержащий логику анализа дерева.
+// Универсальный класс, содержащий логику анализа и отображения дерева.
 // Шаблонизируется типом узла и инициализируется корневым узлом.
 template <NodeType Node>
 class UniversalTreeBenchmark {
@@ -30,10 +30,25 @@ class UniversalTreeBenchmark {
   template <typename Tree>
   UniversalTreeBenchmark(const Tree& tree) : root_(GetRootNodePtr(tree)) {}
 
+  // Вывод дерева в консоль горизонтально.
   void PrintHorizontally() {
     PrintRecursive("", root_, false);
     std::cout << std::endl;
   }
+
+  // Вычисление размера дерева
+  std::size_t CalculateSize() {
+    return CalculateSizeRecursive(root_);
+  }
+
+  // Вычисление высоты дерева
+  // Cormen et al. Introduction to Algorithms (Appendix B.5.3): 
+  // The height of a node Y is the number of edges on the longest downward simple path from Y to a leaf.
+  // The height of a tree is defined as the height of its root node.
+  std::size_t CalculateHeight() {
+    return CalculateHeightRecursive(root_);
+  }
+
 
  private:
   const Node* root_;
@@ -49,13 +64,27 @@ class UniversalTreeBenchmark {
         std::cout << "└──";
       }
 
-      // print the value of the node
+      // Вывод значения
       std::cout << node->data << std::endl;
 
-      // enter the next tree level - left and right branch
+      // Вывод ветвей
       PrintRecursive(prefix + (isLeft ? "│   " : "    "), node->left, true);
       PrintRecursive(prefix + (isLeft ? "│   " : "    "), node->right, false);
     }
+  }
+
+  std::size_t CalculateSizeRecursive(const Node* node) {
+    return (node) ? CalculateSizeRecursive(node->left) + CalculateSizeRecursive(node->right)
+                  : 1;
+  }
+
+  std::size_t CalculateHeightRecursive(const Node* node) {
+    // null
+    if (!node) return 0;
+    // leaf
+    if (!node->left && !node->right) return 0;
+
+    return 1 + std::max(CalculateHeightRecursive(node->left), CalculateHeightRecursive(node->right));
   }
 };
 

@@ -16,7 +16,7 @@ class NaiveBinarySearchTree {
 
   NaiveBinarySearchTree() : root_(nullptr) {}
   ~NaiveBinarySearchTree() {
-    // destruction logic
+    delete root_;
   }
 
   void Insert(ValueType value) {

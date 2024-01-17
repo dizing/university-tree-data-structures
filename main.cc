@@ -21,4 +21,6 @@ int main() {
 
   benchmark::UniversalTreeBenchmark b(a);
   b.PrintHorizontally();
+  std::cout << b.CalculateSize() << std::endl;
+  std::cout << b.CalculateHeight() << std::endl;
 }
