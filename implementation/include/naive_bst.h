@@ -4,25 +4,15 @@
 #include <memory>
 #include <vector>
 
+#include "common.h"
+
 namespace implementations {
 
 template <typename T>
 class NaiveBinarySearchTree {
  public:
-  using ValueType = T;
-  struct Node {
-    Node* left;
-    Node* right;
-    ValueType data;
-
-    Node(ValueType data)
-        : left(nullptr), right(nullptr), data(std::move(data)) {}
-    ~Node() {
-      delete left;
-      delete right;
-    }
-  };
-  using NodeType = Node;
+  using NodeType = Node<T>;
+  using ValueType = typename NodeType::ValueType;
 
   NaiveBinarySearchTree() : root_(nullptr) {}
   ~NaiveBinarySearchTree() {

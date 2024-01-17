@@ -4,8 +4,7 @@
 #include "universal_tree_benchmark.h"
 
 template <>
-const auto
-benchmark::GetRootNodePtr<implementations::NaiveBinarySearchTree<int>>(
+auto benchmark::GetRootNodePtr<implementations::NaiveBinarySearchTree<int>>(
     const implementations::NaiveBinarySearchTree<int>& tree) {
   return tree.GetRoot();
 }

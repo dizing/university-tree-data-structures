@@ -7,7 +7,7 @@ namespace benchmark {
 //Базовая специализация шаблонной функции получения корневой ноды в дереве.
 //Пользователи класса обязаны сделать специализацию со своими типами.
 template <typename Tree>
-const auto GetRootNodePtr(const Tree& tree);
+auto GetRootNodePtr(const Tree& tree);
 
 // Единый концепт для различных типов представляющих узел в дереве
 template <typename T>
