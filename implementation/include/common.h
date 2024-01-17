@@ -27,7 +27,7 @@ struct Node {
         other.left = nullptr;
         other.right = nullptr;
     }
-    Node& operator=(const Node& other) noexcept(noexcept(std::is_nothrow_assignable_v<ValueType>)) {
+    Node& operator=(const Node& other) noexcept(noexcept(std::is_nothrow_copy_assignable_v<ValueType>)) {
         delete left;
         delete right;
         left = nullptr;
