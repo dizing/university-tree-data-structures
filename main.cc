@@ -24,4 +24,7 @@ int main() {
   std::cout << b.CalculateSize() << std::endl;
   std::cout << b.CalculateHeight() << std::endl;
   std::cout << b.CalculateAverageDepth() << std::endl;
+
+  auto ptr = FindByKey(a.GetRoot(), 37);
+  std::cout << ptr->data << std::endl;
 }

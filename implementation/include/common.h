@@ -50,5 +50,18 @@ struct Node {
       delete right;
     }
   };
+  
+
+  template<typename T>
+  const Node<T> * FindByKey (const Node<T>* node, const typename Node<T>::ValueType& key) {
+    if (!node) return nullptr;
+    if (node->data == key) return node;
+    auto left_try = FindByKey(node->left, key);
+    if (left_try) return left_try;
+    auto right_try = FindByKey(node->right, key);
+    if (right_try) return right_try;
+    // Не найдено элемента
+    return nullptr;
+  }
 
 }  // namespace implementations
