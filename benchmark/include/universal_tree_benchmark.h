@@ -49,6 +49,12 @@ class UniversalTreeBenchmark {
     return CalculateHeightRecursive(root_);
   }
 
+  // Вычисление средней глубины(высоты) дерева:
+  // Cумма длин путей от корня до каждой вершины / количество вершин
+  double CalculateAverageDepth() {
+    return CalculateSummaryDepth(root_, 0) / static_cast<double>(CalculateSize());
+  }
+
 
  private:
   const Node* root_;
@@ -74,8 +80,8 @@ class UniversalTreeBenchmark {
   }
 
   std::size_t CalculateSizeRecursive(const Node* node) {
-    return (node) ? CalculateSizeRecursive(node->left) + CalculateSizeRecursive(node->right)
-                  : 1;
+    return (node) ? 1 + CalculateSizeRecursive(node->left) + CalculateSizeRecursive(node->right)
+                  : 0;
   }
 
   std::size_t CalculateHeightRecursive(const Node* node) {
@@ -85,6 +91,11 @@ class UniversalTreeBenchmark {
     if (!node->left && !node->right) return 0;
 
     return 1 + std::max(CalculateHeightRecursive(node->left), CalculateHeightRecursive(node->right));
+  }
+
+  std::size_t CalculateSummaryDepth(const Node* node, unsigned int level) {
+     if (!node) return 0;
+     return level + CalculateSummaryDepth(node->left, level + 1) + CalculateSummaryDepth(node->right, level + 1);
   }
 };
 
