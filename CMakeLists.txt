@@ -19,5 +19,5 @@ target_compile_options(${PROJECT_NAME}
          -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo
          -Wstrict-overflow=5 -Wswitch-default -Wundef -Wunused-variable>
 
-         $<$<CXX_COMPILER_ID:GNU>: -Wlogical-op -Wnoexcept -Wstrict-null-sentinel -sanitize=undefined >
+         $<$<CXX_COMPILER_ID:GNU>: -Wlogical-op -Wnoexcept -Wstrict-null-sentinel -fsanitize=undefined >
 )
