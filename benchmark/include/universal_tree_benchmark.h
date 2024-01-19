@@ -1,8 +1,8 @@
 #pragma once
 #include <concepts>
+#include <functional>
 #include <iostream>
 #include <type_traits>
-#include <functional>
 namespace benchmark {
 
 //Базовая специализация шаблонной функции получения корневой ноды в дереве.
@@ -39,35 +39,31 @@ class UniversalTreeBenchmark {
   }
 
   // Вычисление размера дерева
-  std::size_t CalculateSize() {
-    return CalculateSizeRecursive(root_);
-  }
+  std::size_t CalculateSize() { return CalculateSizeRecursive(root_); }
 
   // Вычисление высоты дерева
-  // Cormen et al. Introduction to Algorithms (Appendix B.5.3): 
-  // The height of a node Y is the number of edges on the longest downward simple path from Y to a leaf.
-  // The height of a tree is defined as the height of its root node.
-  std::size_t CalculateHeight() {
-    return CalculateHeightRecursive(root_);
-  }
+  // Cormen et al. Introduction to Algorithms (Appendix B.5.3):
+  // The height of a node Y is the number of edges on the longest downward
+  // simple path from Y to a leaf. The height of a tree is defined as the height
+  // of its root node.
+  std::size_t CalculateHeight() { return CalculateHeightRecursive(root_); }
 
   // Вычисление средней глубины(высоты) дерева:
   // Cумма длин путей от корня до каждой вершины / количество вершин
   double CalculateAverageDepth() {
-    return CalculateSummaryDepth(root_, 0) / static_cast<double>(CalculateSize());
+    return CalculateSummaryDepth(root_, 0) /
+           static_cast<double>(CalculateSize());
   }
-  
+
   // Вычисление контрольной суммы
   DataType CheckSum() {
     DataType sum{};
-    UniformTraversing(root_, [& sum] (const DataType& value) noexcept(noexcept(value + value)) {sum += value;});
+    UniformTraversing(root_, [&sum](const DataType& value) noexcept(
+                                 noexcept(value + value)) { sum += value; });
     return sum;
   }
 
-  bool IsBinarySearchTree() {
-    return IsBinarySearchTreeRecursive(root_);
-  }
-
+  bool IsBinarySearchTree() { return IsBinarySearchTreeRecursive(root_); }
 
  private:
   const Node* root_;
@@ -93,7 +89,8 @@ class UniversalTreeBenchmark {
   }
 
   std::size_t CalculateSizeRecursive(const Node* node) {
-    return (node) ? 1 + CalculateSizeRecursive(node->left) + CalculateSizeRecursive(node->right)
+    return (node) ? 1 + CalculateSizeRecursive(node->left) +
+                        CalculateSizeRecursive(node->right)
                   : 0;
   }
 
@@ -103,15 +100,18 @@ class UniversalTreeBenchmark {
     // leaf
     if (!node->left && !node->right) return 0;
 
-    return 1 + std::max(CalculateHeightRecursive(node->left), CalculateHeightRecursive(node->right));
+    return 1 + std::max(CalculateHeightRecursive(node->left),
+                        CalculateHeightRecursive(node->right));
   }
 
   std::size_t CalculateSummaryDepth(const Node* node, unsigned int level) {
-     if (!node) return 0;
-     return level + CalculateSummaryDepth(node->left, level + 1) + CalculateSummaryDepth(node->right, level + 1);
+    if (!node) return 0;
+    return level + CalculateSummaryDepth(node->left, level + 1) +
+           CalculateSummaryDepth(node->right, level + 1);
   }
-  // Вызвать функтор, передав данные в каждой ноде 
-  void UniformTraversing(Node* node, std::function<void(const DataType&)> func) {
+  // Вызвать функтор, передав данные в каждой ноде
+  void UniformTraversing(Node* node,
+                         std::function<void(const DataType&)> func) {
     if (!node) return;
     UniformTraversing(node->left, func);
     func(node->data);
@@ -121,17 +121,21 @@ class UniversalTreeBenchmark {
   bool IsBinarySearchTreeRecursive(Node* node) {
     if (!node) return false;
     if (!node->left && !node->right) return true;
-    if (node->left && !node->right) 
-      return (node->left->data < node->data && IsBinarySearchTreeRecursive(node->left));
-    if (!node->left && node->right) 
-      return (node->right->data > node->data && IsBinarySearchTreeRecursive(node->right));
-    
-    return    node->right->data > node->data && IsBinarySearchTreeRecursive(node->right)
-          &&  node->left->data  < node->data && IsBinarySearchTreeRecursive(node->left);
+    if (node->left && !node->right)
+      return (node->left->data < node->data &&
+              IsBinarySearchTreeRecursive(node->left));
+    if (!node->left && node->right)
+      return (node->right->data > node->data &&
+              IsBinarySearchTreeRecursive(node->right));
+
+    return node->right->data > node->data &&
+           IsBinarySearchTreeRecursive(node->right) &&
+           node->left->data < node->data &&
+           IsBinarySearchTreeRecursive(node->left);
   }
 };
 
-//CTAD позволяющий определять тип ноды
+// CTAD позволяющий определять тип ноды
 template <typename Tree>
 UniversalTreeBenchmark(const Tree& t) -> UniversalTreeBenchmark<
     std::remove_pointer_t<decltype(GetRootNodePtr(t))>>;

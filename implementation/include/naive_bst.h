@@ -11,9 +11,7 @@ class NaiveBinarySearchTree {
   using ValueType = typename NodeType::ValueType;
 
   NaiveBinarySearchTree() : root_(nullptr) {}
-  ~NaiveBinarySearchTree() {
-    delete root_;
-  }
+  ~NaiveBinarySearchTree() { delete root_; }
 
   void Insert(ValueType value) {
     if (!root_) {
