@@ -15,8 +15,8 @@ struct Node {
     Node* right;
     ValueType data;
 
-    Node(ValueType data) noexcept(noexcept(std::is_nothrow_move_constructible_v<ValueType>)) 
-        : left(nullptr), right(nullptr), data(std::move(data)) 
+    Node(ValueType value) noexcept(noexcept(std::is_nothrow_move_constructible_v<ValueType>)) 
+        : left(nullptr), right(nullptr), data(std::move(value)) 
         {} 
     
     Node(const Node& other) noexcept(noexcept(std::is_nothrow_constructible_v<ValueType>))
