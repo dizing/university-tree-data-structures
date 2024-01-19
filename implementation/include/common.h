@@ -64,4 +64,13 @@ struct Node {
     return nullptr;
   }
 
+  // Вызвать функтор, передав данные в каждой ноде
+  template<typename T>
+  void UniformTraversing(Node<T>* node, std::function<void(typename Node<T>::ValueType &)> func) {
+    if (!node) return;
+    UniformTraversing(node->left, func);
+    func(node->data);
+    UniformTraversing(node->right, func);
+  }
+
 }  // namespace implementations

@@ -27,6 +27,7 @@ concept NodeType = requires {
 template <NodeType Node>
 class UniversalTreeBenchmark {
  public:
+  using DataType = decltype(Node::data);
   template <typename Tree>
   UniversalTreeBenchmark(const Tree& tree) : root_(GetRootNodePtr(tree)) {}
 
@@ -53,6 +54,17 @@ class UniversalTreeBenchmark {
   // Cумма длин путей от корня до каждой вершины / количество вершин
   double CalculateAverageDepth() {
     return CalculateSummaryDepth(root_, 0) / static_cast<double>(CalculateSize());
+  }
+  
+  // Вычисление контрольной суммы
+  DataType CheckSum() {
+    DataType sum{};
+    UniformTraversing(root_, [& sum] (const DataType& value) {sum += value;});
+    return sum;
+  }
+
+  bool IsBinarySearchTree() {
+    return IsBinarySearchTreeRecursive(root_);
   }
 
 
@@ -96,6 +108,25 @@ class UniversalTreeBenchmark {
   std::size_t CalculateSummaryDepth(const Node* node, unsigned int level) {
      if (!node) return 0;
      return level + CalculateSummaryDepth(node->left, level + 1) + CalculateSummaryDepth(node->right, level + 1);
+  }
+  // Вызвать функтор, передав данные в каждой ноде 
+  void UniformTraversing(Node* node, std::function<void(const DataType&)> func) {
+    if (!node) return;
+    UniformTraversing(node->left, func);
+    func(node->data);
+    UniformTraversing(node->right, func);
+  }
+
+  bool IsBinarySearchTreeRecursive(Node* node) {
+    if (!node) return false;
+    if (!node->left && !node->right) return true;
+    if (node->left && !node->right) 
+      return (node->left->data < node->data && IsBinarySearchTreeRecursive(node->left));
+    if (!node->left && node->right) 
+      return (node->right->data > node->data && IsBinarySearchTreeRecursive(node->right));
+    
+    return    node->right->data > node->data && IsBinarySearchTreeRecursive(node->right)
+          &&  node->left->data  < node->data && IsBinarySearchTreeRecursive(node->left);
   }
 };
 
