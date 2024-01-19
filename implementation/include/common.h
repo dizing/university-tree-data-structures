@@ -1,6 +1,8 @@
 #pragma once
 #include <algorithm>
 #include <type_traits>
+#include <functional>
+
 
 namespace implementations {
 
