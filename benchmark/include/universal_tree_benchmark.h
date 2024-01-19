@@ -2,6 +2,7 @@
 #include <concepts>
 #include <iostream>
 #include <type_traits>
+#include <functional>
 namespace benchmark {
 
 //Базовая специализация шаблонной функции получения корневой ноды в дереве.
@@ -59,7 +60,7 @@ class UniversalTreeBenchmark {
   // Вычисление контрольной суммы
   DataType CheckSum() {
     DataType sum{};
-    UniformTraversing(root_, [& sum] (const DataType& value) {sum += value;});
+    UniformTraversing(root_, [& sum] (const DataType& value) noexcept(noexcept(value + value)) {sum += value;});
     return sum;
   }
 

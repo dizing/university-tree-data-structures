@@ -1,5 +1,5 @@
 #pragma once
-
+#include <cassert>
 #include "common.h"
 #include <vector>
 
@@ -24,7 +24,7 @@ class PerfectlyBalancedBinaryTree {
 
   void Insert(ValueType value) {
     std::vector<ValueType> elements {value};
-    UniformTraversing(root_, [&elements](ValueType& value) {elements.push_back(value);});
+    UniformTraversing(root_, [&elements](ValueType& val) {elements.push_back(val);});
     sort(elements.begin(), elements.end());
     elements.erase(unique( elements.begin(), elements.end()), elements.end());
     delete root_;

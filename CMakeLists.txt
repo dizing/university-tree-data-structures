@@ -15,7 +15,7 @@ target_compile_options(${PROJECT_NAME}
     PRIVATE
          $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>: 
          -Wall -Wextra -Wpedantic -Wcast-align -Wcast-qual -Wctor-dtor-privacy
-         -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs
+         -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-include-dirs
          -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo
          -Wstrict-overflow=5 -Wswitch-default -Wundef -Wunused-variable >
 
