@@ -1,5 +1,6 @@
 #include <map>
 #include <random>
+#include <array>
 
 #include "naive_bst.h"
 #include "perfectly_balanced_bst.h"
