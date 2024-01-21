@@ -35,10 +35,16 @@ std::vector<int> GenerateRandomData(std::size_t size) {
 }
 
 int main() {
+  // Подготовка данных
+  std::array<std::vector<int>, 5> data_set_list;
+  for (std::size_t i = 0; i < 5; ++i) {
+    data_set_list[i] = GenerateRandomData((1 + i) * 100);
+  }
+
   std::cout << "Вывод анализа случайного дерева поиска" << std::endl;
-  for (auto& data_size : {100u, 200u, 300u, 400u, 500u}) {
+  for (auto& data_set : data_set_list) {
     implementations::NaiveBinarySearchTree<int> tree;
-    for (auto& value : GenerateRandomData(data_size)) {
+    for (auto& value : data_set) {
       tree.Insert(value);
     }
     benchmark::UniversalTreeBenchmark bench(tree);
@@ -49,9 +55,8 @@ int main() {
 
   std::cout << "Вывод анализа идеально сбалансированного дерева поиска"
             << std::endl;
-  for (auto& data_size : {100u, 200u, 300u, 400u, 500u}) {
-    implementations::PerfectlyBalancedBinaryTree<int> tree{
-        GenerateRandomData(data_size)};
+  for (auto& data_set : data_set_list) {
+    implementations::PerfectlyBalancedBinaryTree<int> tree{data_set};
     benchmark::UniversalTreeBenchmark bench(tree);
     std::cout << bench.CalculateSize() << ", " << bench.CheckSum() << ", "
               << bench.CalculateHeight() << ", "
