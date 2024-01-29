@@ -19,5 +19,6 @@ target_compile_options(${PROJECT_NAME}
          -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo
          -Wstrict-overflow=5 -Wswitch-default -Wundef -Wunused-variable >
 
-         $<$<CXX_COMPILER_ID:GNU>: -Wlogical-op -Wnoexcept -Wstrict-null-sentinel >
+         $<$<CXX_COMPILER_ID:GNU>: -Wlogical-op -Wnoexcept -Wstrict-null-sentinel -fsanitize=address>
 )
+target_link_options(${PROJECT_NAME} PRIVATE $<$<CXX_COMPILER_ID:GNU>:-fsanitize=address>)
