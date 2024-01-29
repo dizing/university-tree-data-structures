@@ -1,23 +1,23 @@
+#include <array>
 #include <map>
 #include <random>
-#include <array>
 
+#include "avl_tree.h"
 #include "naive_bst.h"
 #include "perfectly_balanced_bst.h"
 #include "universal_tree_benchmark.h"
-#include "avl_tree.h"
-
-template <>
-auto benchmark::GetRootNodePtr<implementations::NaiveBinarySearchTree<int>>(
-    const implementations::NaiveBinarySearchTree<int>& tree) {
-  return tree.GetRoot();
-}
 
 template <>
 auto benchmark::GetRootNodePtr<
     implementations::PerfectlyBalancedBinaryTree<int>>(
     const implementations::PerfectlyBalancedBinaryTree<int>& tree) {
   return tree.GetRoot();
+}
+
+template <>
+auto benchmark::GetRootNodePtr<implementations::AVLTree<int>>(
+    const implementations::AVLTree<int>& tree) {
+  return static_cast<const implementations::Node<int>*>(tree.GetRoot());
 }
 
 std::vector<int> GenerateRandomData(std::size_t size) {
@@ -43,31 +43,25 @@ int main() {
     data_set_list[i] = GenerateRandomData((1 + i) * 100);
   }
 
-  // std::cout << "Вывод анализа случайного дерева поиска" << std::endl;
-  // for (auto& data_set : data_set_list) {
-  //   implementations::NaiveBinarySearchTree<int> tree;
-  //   for (auto& value : data_set) {
-  //     tree.Insert(value);
-  //   }
-  //   benchmark::UniversalTreeBenchmark bench(tree);
-  //   std::cout << bench.CalculateSize() << ", " << bench.CheckSum() << ", "
-  //             << bench.CalculateHeight() << ", "
-  //             << bench.CalculateAverageDepth() << std::endl;
-  // }
+  std::cout << "Вывод анализа АВЛ дерева" << std::endl;
+  for (auto& data_set : data_set_list) {
+    implementations::AVLTree<int> tree;
+    for (auto& value : data_set) {
+      tree.Insert(value);
+    }
+    benchmark::UniversalTreeBenchmark bench(tree);
+    std::cout << bench.CalculateSize() << ", " << bench.CheckSum() << ", "
+              << bench.CalculateHeight() << ", "
+              << bench.CalculateAverageDepth() << std::endl;
+  }
 
-  // std::cout << "Вывод анализа идеально сбалансированного дерева поиска"
-  //           << std::endl;
-  // for (auto& data_set : data_set_list) {
-  //   implementations::PerfectlyBalancedBinaryTree<int> tree{data_set};
-  //   benchmark::UniversalTreeBenchmark bench(tree);
-  //   std::cout << bench.CalculateSize() << ", " << bench.CheckSum() << ", "
-  //             << bench.CalculateHeight() << ", "
-  //             << bench.CalculateAverageDepth() << std::endl;
-  // }
-  implementations::AVLTree<int> tree;
-  implementations::AVLTree<int>::NodeType node(25);
-  node.FixHeight();
-  std::cout <<implementations::AVLTree<int>::NodeType::GetHeight(&node);
-
-
+  std::cout << "Вывод анализа идеально сбалансированного дерева поиска"
+            << std::endl;
+  for (auto& data_set : data_set_list) {
+    implementations::PerfectlyBalancedBinaryTree<int> tree{data_set};
+    benchmark::UniversalTreeBenchmark bench(tree);
+    std::cout << bench.CalculateSize() << ", " << bench.CheckSum() << ", "
+              << bench.CalculateHeight() << ", "
+              << bench.CalculateAverageDepth() << std::endl;
+  }
 }
