@@ -25,6 +25,7 @@ class AVLTree {
       height = std::max(GetHeight(GetLeft()), GetHeight(GetRight())) + 1;
     }
     int BalanceFactor() { return GetHeight(GetRight()) - GetHeight(GetLeft()); }
+    ~AVLNode() override = default;
   };
 
   using NodeType = AVLNode;

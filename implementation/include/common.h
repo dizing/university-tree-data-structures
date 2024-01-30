@@ -50,7 +50,7 @@ struct Node {
     other.right = nullptr;
     return *this;
   }
-  ~Node() {
+  virtual ~Node() {
     delete left;
     delete right;
   }
