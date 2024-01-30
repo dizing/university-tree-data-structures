@@ -79,4 +79,14 @@ void UniformTraversing(Node<T>* node,
   UniformTraversing(node->right, func);
 }
 
+template <typename T>
+void UniformTraversing(
+    const Node<T>* node,
+    std::function<void(const typename Node<T>::ValueType&)> func) {
+  if (!node) return;
+  UniformTraversing(static_cast<const Node<T>*>(node->left), func);
+  func(node->data);
+  UniformTraversing(static_cast<const Node<T>*>(node->right), func);
+}
+
 }  // namespace implementations

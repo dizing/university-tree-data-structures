@@ -16,7 +16,8 @@ concept NodeType = requires {
   T::left;
   T::right;
   T::data;
-} || requires(T t) {  // TODO: сделать в бенчмарке поддержку этих функций
+}
+|| requires(T t) {  // TODO: сделать в бенчмарке поддержку этих функций
   t.GetLeft();
   t.GetRight();
   t.GetData();
