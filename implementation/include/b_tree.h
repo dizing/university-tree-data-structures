@@ -42,6 +42,14 @@ class BinaryBTree {
     return count;
   }
 
+    static void UniformTraversing(const Node* node,
+                        std::function<void(T)> func) {
+        if (!node) return;
+        UniformTraversing(node->left, func);
+        func(node->data);
+        UniformTraversing(node->right, func);
+    }
+
  private:
   Node* root_ = nullptr;
   bool VR = true;
