@@ -3,21 +3,19 @@
 #include <random>
 
 #include "avl_tree.h"
-#include "naive_bst.h"
-#include "perfectly_balanced_bst.h"
+#include "b_tree.h"
 #include "universal_tree_benchmark.h"
-
-template <>
-auto benchmark::GetRootNodePtr<
-    implementations::PerfectlyBalancedBinaryTree<int>>(
-    const implementations::PerfectlyBalancedBinaryTree<int>& tree) {
-  return tree.GetRoot();
-}
 
 template <>
 auto benchmark::GetRootNodePtr<implementations::AVLTree<int>>(
     const implementations::AVLTree<int>& tree) {
   return static_cast<const implementations::Node<int>*>(tree.GetRoot());
+}
+
+template <>
+auto benchmark::GetRootNodePtr<implementations::BinaryBTree<int>>(
+    const implementations::BinaryBTree<int>& tree) {
+  return tree.GetRoot();
 }
 
 std::vector<int> GenerateRandomData(std::size_t size) {
@@ -50,15 +48,6 @@ int main() {
       avl_trees[i].Insert(value);
     }
   }
-  std::cout << "Распечатать авл деревья слева направо разных размеров"
-            << std::endl;
-  for (std::size_t i = 0; i < 5; ++i) {
-    std::cout << "Размер: " << (i + 1) * 100 << std::endl;
-    UniformTraversing(avl_trees[i].GetRoot(),
-                      [](auto& value) { std::cout << value << " "; });
-    std::cout << std::endl;
-  }
-
   std::cout << "Вывод анализа АВЛ дерева" << std::endl;
   for (auto& tree : avl_trees) {
     benchmark::UniversalTreeBenchmark bench(tree);
@@ -67,13 +56,15 @@ int main() {
               << bench.CalculateAverageDepth() << std::endl;
   }
 
-  std::cout << "Вывод анализа идеально сбалансированного дерева поиска"
-            << std::endl;
+  std::cout << "Вывод анализа двоичного б дерева поиска" << std::endl;
   for (auto& data_set : data_set_list) {
-    implementations::PerfectlyBalancedBinaryTree<int> tree{data_set};
+    implementations::BinaryBTree<int> tree;
+    for (auto val : data_set) {
+      tree.Insert(val);
+    }
     benchmark::UniversalTreeBenchmark bench(tree);
     std::cout << bench.CalculateSize() << ", " << bench.CheckSum() << ", "
-              << bench.CalculateHeight() << ", "
+              << tree.GetLevels() << ", " << bench.CalculateHeight() << ", "
               << bench.CalculateAverageDepth() << std::endl;
   }
 }

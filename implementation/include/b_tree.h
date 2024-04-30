@@ -1,7 +1,7 @@
 #pragma once
 
 /*
-    Binary B search tree 
+    Binary B search tree
     Двоичное Б-дерево поиска (ДБД)
 
 */
@@ -12,12 +12,13 @@ namespace binary_b_tree_support {
 
 template <typename T>
 class Node {
-    public:
-    T value;
-    bool have_right_neighbour; // in right pointer stored neighbour on same size
-    Node* left; // always points on childs
-    Node* right; // may points on child or on right neighbour
-    
+ public:
+  T data;
+  int BAL;
+  Node* left;   // always points on childs
+  Node* right;  // may points on child or on right neighbour
+
+  Node(T data) : data(data), BAL(0), left(nullptr), right(nullptr) {}
 };
 
 }  // namespace binary_b_tree_support
@@ -27,27 +28,79 @@ class BinaryBTree {
  public:
   using Node = binary_b_tree_support::Node<T>;
 
-    void Insert(T value) {
-        root_ = InsertRecursive(root_, value);
+  void Insert(T value) { root_ = InsertRecursive(root_, value); }
+
+  const Node* GetRoot() const { return root_; }
+
+  int GetLevels() {
+    auto ptr = root_;
+    int count = 0;
+    while (ptr) {
+      ++count;
+      ptr = ptr->left;
     }
+    return count;
+  }
 
  private:
-    Node* root_;
+  Node* root_ = nullptr;
+  bool VR = true;
+  bool HR = true;
 
-    template <typename U>
-    Node* InsertRecursive(Node* node, U&& value) {
-        if (!node) {
-            return new Node(std::forward<U>(value));выds
-        }
-
-        if (value < node->value) {
-            node->left = InsertRecursive(node->left, std::forward<U>(value));
-            // третий случай 
-        }
-
-
-
+  template <typename U>
+  Node* InsertRecursive(Node* node, U&& value) {
+    if (!node) {
+      VR = true;
+      return new Node(std::forward<U>(value));
     }
+
+    if (value < node->data) {
+      node->left = InsertRecursive(node->left, std::forward<U>(value));
+      if (VR) {
+        if (node->BAL > 0) {
+          //(3)
+          auto q = node->left;
+          node->left = q->right;
+          q->right = node;
+          node = q;
+          q->BAL = 1;
+          VR = false;
+          HR = true;
+        } else {
+          //(4)
+          node->BAL = 0;
+          HR = true;
+        }
+      } else {
+        HR = false;
+      }
+
+    } else if (value > node->data) {
+      node->right = InsertRecursive(node->right, std::forward<U>(value));
+      if (VR) {
+        //(1)
+        node->BAL = 1;
+        VR = false;
+        HR = true;
+      } else if (HR) {
+        if (node->BAL > 0) {
+          //(2)
+          auto q = node->right;
+          node->right = q->left;
+          node->BAL = 0;
+          q->BAL = 0;
+          q->left = node;
+          node = q;
+          VR = true;
+          HR = false;
+        } else {
+          HR = false;
+        }
+      }
+    }
+
+    return node;
+  }
 };
 
 }  // namespace implementations
